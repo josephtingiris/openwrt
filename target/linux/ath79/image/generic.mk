@@ -92,6 +92,7 @@ define Device/avm_fritz4020
       append-squashfs-fakeroot-be | pad-to 256 | \
       append-rootfs | pad-rootfs | append-metadata | check-size $$$$(IMAGE_SIZE)
   DEVICE_PACKAGES := fritz-tffs
+  SUPPORTED_DEVICES += fritz4020
 endef
 TARGET_DEVICES += avm_fritz4020
 
@@ -185,6 +186,14 @@ define Device/devolo_dvl1750c
   IMAGE_SIZE := 15936k
 endef
 TARGET_DEVICES += devolo_dvl1750c
+
+define Device/devolo_dvl1750e
+  ATH_SOC := qca9558
+  DEVICE_TITLE := devolo WiFi pro 1750e
+  DEVICE_PACKAGES := kmod-usb2 kmod-ath10k-ct ath10k-firmware-qca988x-ct
+  IMAGE_SIZE := 15936k
+endef
+TARGET_DEVICES += devolo_dvl1750e
 
 define Device/devolo_dvl1750i
   ATH_SOC := qca9558
@@ -340,6 +349,18 @@ define Device/iodata_wn-ac1167dgr
   DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-ath10k-ct ath10k-firmware-qca988x-ct
 endef
 TARGET_DEVICES += iodata_wn-ac1167dgr
+
+define Device/iodata_wn-ac1600dgr
+  ATH_SOC := qca9557
+  DEVICE_TITLE := I-O DATA WN-AC1600DGR
+  IMAGE_SIZE := 14656k
+  IMAGES += factory.bin
+  IMAGE/factory.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | \
+    append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE) | \
+    senao-header -r 0x30a -p 0x60 -t 2 -v 200
+  DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-ath10k-ct ath10k-firmware-qca988x-ct
+endef
+TARGET_DEVICES += iodata_wn-ac1600dgr
 
 define Device/iodata_wn-ac1600dgr2
   ATH_SOC := qca9557
@@ -520,3 +541,10 @@ define Device/winchannel_wb2000
   DEVICE_PACKAGES := kmod-i2c-core kmod-i2c-gpio kmod-rtc-ds1307 kmod-usb2 kmod-usb-ledtrig-usbport
 endef
 TARGET_DEVICES += winchannel_wb2000
+
+define Device/xiaomi_mi-router-4q
+  ATH_SOC := qca9561
+  DEVICE_TITLE := Xiaomi Mi Router 4Q
+  IMAGE_SIZE := 14336k
+endef
+TARGET_DEVICES += xiaomi_mi-router-4q

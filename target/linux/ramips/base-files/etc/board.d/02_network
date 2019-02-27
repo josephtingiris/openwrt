@@ -33,6 +33,7 @@ ramips_setup_interfaces()
 	case $board in
 	11acnas|\
 	d-team,newifi-d2|\
+	dir-615-h1|\
 	w2914nsv2|\
 	zbt-we2026)
 		ucidef_add_switch "switch0" \
@@ -107,7 +108,6 @@ ramips_setup_interfaces()
 	mtc,wr1201|\
 	mzk-750dhp|\
 	mzk-w300nh2|\
-	netgear,r6120|\
 	nixcore-x1-8M|\
 	nixcore-x1-16M|\
 	oy-0001|\
@@ -229,6 +229,7 @@ ramips_setup_interfaces()
 	skylab,skw92a|\
 	tplink,c20-v4|\
 	tplink,c50-v3|\
+	tplink,c50-v4|\
 	tplink,tl-mr3420-v5|\
 	tplink,tl-wr842n-v5|\
 	tl-wr840n-v4|\
@@ -317,6 +318,10 @@ ramips_setup_interfaces()
 		ucidef_add_switch "switch0" \
 			"1:lan" "2:lan" "3:lan" "4:lan" "5:lan" "0:wan" "6@eth0"
 		;;
+	iodata,wn-ac1167gr)
+		ucidef_add_switch "switch1" \
+			"1:lan:4" "2:lan:3" "3:lan:2" "4:lan:1" "0:wan" "6@eth0"
+		;;
 	kn_rf)
 		ucidef_add_switch "switch0" \
 			"0:wan" "1:lan" "2:lan" "3:lan" "4:lan" "6@eth0"
@@ -334,6 +339,10 @@ ramips_setup_interfaces()
 		ucidef_add_switch "switch0" \
 			"0:lan" "1:lan" "2:lan" "3:lan" "6t@eth0"
 		ucidef_set_interface_wan "usb0"
+		;;
+	netgear,r6120)
+		ucidef_add_switch "switch0" \
+			"0:lan:4" "1:lan:3" "2:lan:2" "3:lan:1" "4:wan" "6@eth0"
 		;;
 	hc5761)
 		ucidef_add_switch "switch0" \
@@ -522,6 +531,9 @@ ramips_setup_macs()
 		lan_mac=`mtd_get_mac_ascii bdinfo "Vfac_mac "`
 		[ -n "$lan_mac" ] || lan_mac=$(cat /sys/class/net/eth0/address)
 		wan_mac=$(macaddr_add "$lan_mac" 1)
+		;;
+	iodata,wn-ac1167gr)
+		wan_mac=$(macaddr_add "$(mtd_get_mac_binary Factory 4)" -1)
 		;;
 	iodata,wn-ax1167gr|\
 	iodata,wn-gx300gr)
